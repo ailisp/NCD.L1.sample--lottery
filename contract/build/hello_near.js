@@ -572,7 +572,6 @@ function promiseBatchActionFunctionCallWeight(promiseIndex, methodName, args, am
   env.promise_batch_action_function_call_weight(promiseIndex, methodName, args, amount, gas, weight);
 }
 function promiseReturn(promiseIdx) {
-  log('promiseReturn');
   env.promise_return(promiseIdx);
 }
 function storageWrite(key, value) {
@@ -846,10 +845,7 @@ class UnorderedSet {
 
   get length() {
     return this.elements.length;
-  } // noop, called by deserialize
-
-
-  set length(_l) {}
+  }
 
   isEmpty() {
     return this.elements.isEmpty();
@@ -944,9 +940,7 @@ class UnorderedSet {
 
 
   static deserialize(data) {
-    let set = new UnorderedSet(data.prefix); // reconstruct UnorderedSet
-
-    set.length = data.length; // reconstruct Vector
+    let set = new UnorderedSet(data.prefix); // reconstruct Vector
 
     let elementsPrefix = data.prefix + "e";
     set.elements = new Vector(elementsPrefix);
@@ -1526,9 +1520,9 @@ let Contract = (_dec = NearBindgen({
   }
 
   payout() {
-    NearPromise.new(this.winner).transfer(this.pot) // transfer payout to winner
+    return NearPromise.new(this.winner).transfer(this.pot) // transfer payout to winner
     .then( // receive confirmation of payout before setting game to inactive
-    NearPromise.new(currentAccountId()).functionCall("on_payout_complete", bytes(JSON.stringify({})), 0n, XCC_GAS)).onReturn();
+    NearPromise.new(currentAccountId()).functionCall("on_payout_complete", bytes(JSON.stringify({})), 0n, XCC_GAS));
   }
 
 }, (_applyDecoratedDescriptor(_class2.prototype, "init", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "init"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_owner", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "get_owner"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_winner", [_dec4], Object.getOwnPropertyDescriptor(_class2.prototype, "get_winner"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_pot", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "get_pot"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_fee", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "get_fee"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_fee_strategy", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "get_fee_strategy"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_has_played", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "get_has_played"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_last_played", [_dec9], Object.getOwnPropertyDescriptor(_class2.prototype, "get_last_played"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "get_active", [_dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "get_active"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "explain_fees", [_dec11], Object.getOwnPropertyDescriptor(_class2.prototype, "explain_fees"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "explain_lottery", [_dec12], Object.getOwnPropertyDescriptor(_class2.prototype, "explain_lottery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "play", [_dec13], Object.getOwnPropertyDescriptor(_class2.prototype, "play"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "configure_lottery", [_dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "configure_lottery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "configure_fee", [_dec15], Object.getOwnPropertyDescriptor(_class2.prototype, "configure_fee"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "reset", [_dec16], Object.getOwnPropertyDescriptor(_class2.prototype, "reset"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "on_payout_complete", [_dec17], Object.getOwnPropertyDescriptor(_class2.prototype, "on_payout_complete"), _class2.prototype)), _class2)) || _class);
